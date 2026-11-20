@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f5f0">
+  <title>Page not found — Fieldnotes</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f7f5f0;
+      --ink: #252c28;
+      --muted: #727872;
+      --green: #456b57;
+      --line: #dedfd7;
+      --white: #fffefa;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; }
+
+    .page {
+      width: min(1120px, calc(100% - 48px));
+      min-height: 100vh;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      height: 88px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 20px;
+      letter-spacing: -0.04em;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #aebcaf;
+      border-radius: 50%;
+      color: var(--green);
+      font-family: Georgia, serif;
+      font-size: 17px;
+      line-height: 1;
+    }
+
+    .home-link {
+      color: var(--muted);
+      font-size: 13px;
+      text-decoration: none;
+    }
+
+    .home-link:hover { color: var(--green); }
+
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: clamp(40px, 8vw, 112px);
+      padding: 72px 0 88px;
+    }
+
+    .copy { max-width: 450px; }
+
+    .eyebrow {
+      margin: 0 0 22px;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(48px, 6.5vw, 78px);
+      font-weight: 400;
+      letter-spacing: -0.065em;
+      line-height: 0.99;
+    }
+
+    .description {
+      max-width: 350px;
+      margin: 24px 0 30px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.75;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 22px;
+    }
+
+    .button {
+      min-height: 48px;
+      padding: 0 21px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      background: var(--green);
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 160ms ease, transform 160ms ease;
+    }
+
+    .button:hover {
+      background: #365642;
+      transform: translateY(-1px);
+    }
+
+    .back-link {
+      color: var(--muted);
+      font-size: 13px;
+      text-decoration: none;
+    }
+
+    .back-link:hover { color: var(--ink); }
+
+    .art {
+      min-height: 390px;
+      position: relative;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid #e5e2d9;
+      border-radius: 48% 48% 7px 7px;
+      background:
+        radial-gradient(ellipse at 50% 72%, rgba(255,255,255,.78), transparent 47%),
+        #efeee6;
+    }
+
+    .sun {
+      position: absolute;
+      top: 15%;
+      right: 18%;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: #e7c99f;
+      opacity: .8;
+    }
+
+    .hill {
+      position: absolute;
+      bottom: -18%;
+      width: 115%;
+      height: 53%;
+      border-radius: 50% 50% 0 0;
+      background: #d7dfd2;
+    }
+
+    .hill.back {
+      bottom: 8%;
+      left: -40%;
+      width: 105%;
+      height: 37%;
+      background: #e1e4d9;
+      transform: rotate(-9deg);
+    }
+
+    .hill.front {
+      right: -38%;
+      background: #c8d5c6;
+      transform: rotate(9deg);
+    }
+
+    .path {
+      position: absolute;
+      z-index: 2;
+      bottom: -15%;
+      left: 43%;
+      width: 28%;
+      height: 51%;
+      border: 2px solid rgba(255, 254, 250, .8);
+      border-bottom: 0;
+      border-radius: 50% 50% 0 0;
+      transform: rotate(-9deg);
+    }
+
+    .sign {
+      position: absolute;
+      z-index: 3;
+      top: 30%;
+      left: 47%;
+      width: 4px;
+      height: 100px;
+      border-radius: 4px;
+      background: #657767;
+      transform: rotate(3deg);
+    }
+
+    .sign::before {
+      content: "404";
+      position: absolute;
+      top: 8px;
+      left: 3px;
+      padding: 8px 13px;
+      border: 1px solid #b8c2b5;
+      border-radius: 3px;
+      background: var(--white);
+      color: var(--green);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 20px;
+      letter-spacing: .04em;
+      box-shadow: 0 5px 18px rgba(47, 59, 47, .07);
+    }
+
+    .tiny-star {
+      position: absolute;
+      z-index: 3;
+      color: #9a9e83;
+      font-size: 18px;
+    }
+
+    .star-one { top: 24%; left: 23%; }
+    .star-two { top: 43%; right: 19%; font-size: 12px; }
+    .star-three { top: 18%; left: 48%; font-size: 11px; }
+
+    footer {
+      padding: 22px 0;
+      border-top: 1px solid var(--line);
+      color: #858981;
+      font-size: 11px;
+      letter-spacing: .02em;
+    }
+
+    @media (max-width: 720px) {
+      .page { width: min(100% - 36px, 520px); }
+      header { height: 72px; }
+      main {
+        grid-template-columns: 1fr;
+        gap: 42px;
+        padding: 62px 0;
+      }
+      .copy { order: 1; }
+      .art {
+        order: 2;
+        min-height: 280px;
+        max-height: 340px;
+      }
+      h1 { font-size: clamp(52px, 14vw, 72px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+ <script>
+(async () => {
+  const prefix = "/db2/";
+  const path = location.pathname;
+
+  if (!path.startsWith(prefix)) return;
+
+const key = decodeURIComponent(path.slice(prefix.length)).replace(/\.html$/, "");
+
+  try {
+    const routes = JSON.parse(localStorage.getItem("route") || "{}");
+    const pageName = routes[key];
+
+    if (!pageName || !/^[\w-]+$/.test(pageName)) return;
+
+    const response = await fetch(`${prefix}${pageName}.html`);
+    if (!response.ok) return;
+
+    document.open();
+    document.write(await response.text());
+    document.close();
+  } catch {
+    // Keep the 404 content if the mapping or page can't be loaded.
+    document.querySelector(".page").hidden = false;
+  }
+})();
+</script>
+</head>
+<body>
+  <div class="page" hidden>
+    <header>
+      <a class="brand" href="/" aria-label="Fieldnotes home">
+        <span class="brand-mark" aria-hidden="true">f</span>
+        <span>fieldnotes</span>
+      </a>
+      <a class="home-link" href="/">Home</a>
+    </header>
+
+    <main>
+      <section class="copy" aria-labelledby="title">
+        <p class="eyebrow">A little off the path</p>
+        <h1 id="title">This page<br>isn’t here.</h1>
+        <p class="description">
+          It may have moved, or the link may be taking the scenic route.
+          Let’s get you back to familiar ground.
+        </p>
+        <div class="actions">
+          <a class="button" href="/">Back to home <span aria-hidden="true">&nbsp;→</span></a>
+          <a class="back-link" href="javascript:history.back()">Go back</a>
+        </div>
+      </section>
+
+      <div class="art" role="img" aria-label="A quiet, rolling landscape with a sign pointing the way">
+        <span class="sun"></span>
+        <span class="tiny-star star-one" aria-hidden="true">✳</span>
+        <span class="tiny-star star-two" aria-hidden="true">✳</span>
+        <span class="tiny-star star-three" aria-hidden="true">✦</span>
+        <span class="hill back"></span>
+        <span class="hill front"></span>
+        <span class="path"></span>
+        <span class="sign"></span>
+      </div>
+    </main>
+
+    <footer>Take a breath. You’re not lost for long.</footer>
+  </div>
+</body>
+</html>

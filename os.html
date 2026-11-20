@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; }
+    nav { padding: 1rem; background: #f5f5f5; border-bottom: 1px solid #ddd; }
+    nav a { margin-right: 1rem; text-decoration: none; color: #333; }
+    nav a:hover { color: #0066cc; }
+    #content { padding: 2rem; }
+  </style>
+</head>
+<!-- data-page   = filename (without .html) in private repo
+     data-css    = comma-separated list of CSS files in private repo
+     data-js     = comma-separated list of JS files in private repo (loaded in order) -->
+<body data-page="os"
+      data-js="osj">
+
+
+
+
+
+  <div id="content">Loading…</div>
+  <script>
+(function () {
+  var code = localStorage.getItem("_loader_js");
+  if (!code) { location.replace("index.html"); return; }
+  var el = document.createElement("script");
+  el.textContent = code;
+  document.body.appendChild(el);
+})();
+</script>   
+</body>
+</html>   
