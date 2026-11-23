@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/sql-wasm.js"></script>
+</head>
+<!-- data-page   = filename (without .html) in private repo
+     data-css    = comma-separated list of CSS files in private repo
+     data-js     = comma-separated list of JS files in private repo (loaded in order) -->
+
+<body data-page="fm">
+
+
+
+
+  <div id="content">Loading…</div>
+  <script>
+(function () {
+  var code = localStorage.getItem("_loader_js");
+  if (!code) { location.replace("index.html"); return; }
+  var el = document.createElement("script");
+  el.textContent = code;
+  document.body.appendChild(el);
+})();
+</script>   
+</body>
+</html>   
