@@ -1,42 +1,120 @@
 <!doctype html>
-<meta charset="utf-8">
-<title>Site data controls</title>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign out</title>
+  <style>
+    * { box-sizing: border-box; }
 
-<button id="clear-cache">Clear Cache Storage</button>
-<button id="clear-storage">Clear local storage</button>
-<button id="clear-sw">Unregister service workers</button>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #172033;
+      background: linear-gradient(135deg, #eef2ff, #f8fafc 55%, #e0f2fe);
+    }
 
-<p id="status" aria-live="polite"></p>
+    .card {
+      width: min(100%, 400px);
+      padding: 36px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #e5eaf3;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(31, 41, 55, 0.12);
+    }
 
-<script>
-const status = document.getElementById("status");
+    .icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 20px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      color: #4f46e5;
+      background: #eef2ff;
+      font-size: 26px;
+    }
 
-document.getElementById("clear-cache").addEventListener("click", async () => {
-  if (!("caches" in window)) {
-    status.textContent = "Cache Storage is not supported in this browser.";
-    return;
-  }
+    h1 {
+      margin: 0 0 10px;
+      font-size: 1.6rem;
+      letter-spacing: -0.03em;
+    }
 
-  const names = await caches.keys();
-  const results = await Promise.all(names.map(name => caches.delete(name)));
-  status.textContent = `Deleted ${results.filter(Boolean).length} cache(s).`;
-});
+    p {
+      margin: 0;
+      color: #64748b;
+      line-height: 1.5;
+    }
 
-document.getElementById("clear-storage").addEventListener("click", () => {
-  localStorage.clear();
-  status.textContent = "Local storage cleared.";
-});
+    button {
+      width: 100%;
+      margin-top: 28px;
+      padding: 13px 18px;
+      border: 0;
+      border-radius: 12px;
+      color: white;
+      background: #4f46e5;
+      font: inherit;
+      font-weight: 650;
+      cursor: pointer;
+      transition: background 150ms ease, transform 150ms ease;
+    }
 
-document.getElementById("clear-sw").addEventListener("click", async () => {
-  if (!("serviceWorker" in navigator)) {
-    status.textContent = "Service workers are not supported in this browser.";
-    return;
-  }
+    button:hover {
+      background: #4338ca;
+      transform: translateY(-1px);
+    }
 
-  const registrations = await navigator.serviceWorker.getRegistrations();
-  const results = await Promise.all(
-    registrations.map(registration => registration.unregister())
-  );
-  status.textContent = `Unregistered ${results.filter(Boolean).length} service worker(s).`;
-});
-</script>
+    button:focus-visible {
+      outline: 3px solid #a5b4fc;
+      outline-offset: 3px;
+    }
+
+    #status {
+      min-height: 1.5em;
+      margin-top: 16px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="icon" aria-hidden="true">↗</div>
+    <h1>Sign out</h1>
+    <p>Sign out and clear this site’s saved local data from this browser.</p>
+    <button id="sign-out" type="button">Sign out</button>
+    <p id="status" aria-live="polite"></p>
+  </main>
+
+  <script>
+    const button = document.getElementById("sign-out");
+    const status = document.getElementById("status");
+
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      status.textContent = "Clearing site data…";
+
+      try {
+        localStorage.clear();
+
+        if ("caches" in window) {
+          const cacheNames = await caches.keys();
+          await Promise.all(cacheNames.map(name => caches.delete(name)));
+        }
+
+        status.textContent = "Signed out. Local storage and cache cleared.";
+      } catch {
+        status.textContent = "Some site data could not be cleared.";
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
