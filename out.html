@@ -97,24 +97,24 @@
     const status = document.getElementById("status");
 
     button.addEventListener("click", async () => {
-      button.disabled = true;
-      status.textContent = "Clearing site data…";
+  button.disabled = true;
+  status.textContent = "Clearing site data…";
 
-      try {
-        localStorage.clear();
+  try {
+    localStorage.clear();
 
-        if ("caches" in window) {
-          const cacheNames = await caches.keys();
-          await Promise.all(cacheNames.map(name => caches.delete(name)));
-        }
+    if ("caches" in window) {
+      const cacheNames = await caches.keys();
+      await Promise.all(cacheNames.map(name => caches.delete(name)));
+    }
 
-        status.textContent = "Signed out. Local storage and cache cleared.";
-      } catch {
-        status.textContent = "Some site data could not be cleared.";
-      } finally {
-        button.disabled = false;
-      }
-    });
+    window.location.assign("/db2");
+  } catch {
+    status.textContent = "Some site data could not be cleared.";
+    button.disabled = false;
+  }
+});
+
   </script>
 </body>
 </html>
