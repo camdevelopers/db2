@@ -1,0 +1,42 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Site data controls</title>
+
+<button id="clear-cache">Clear Cache Storage</button>
+<button id="clear-storage">Clear local storage</button>
+<button id="clear-sw">Unregister service workers</button>
+
+<p id="status" aria-live="polite"></p>
+
+<script>
+const status = document.getElementById("status");
+
+document.getElementById("clear-cache").addEventListener("click", async () => {
+  if (!("caches" in window)) {
+    status.textContent = "Cache Storage is not supported in this browser.";
+    return;
+  }
+
+  const names = await caches.keys();
+  const results = await Promise.all(names.map(name => caches.delete(name)));
+  status.textContent = `Deleted ${results.filter(Boolean).length} cache(s).`;
+});
+
+document.getElementById("clear-storage").addEventListener("click", () => {
+  localStorage.clear();
+  status.textContent = "Local storage cleared.";
+});
+
+document.getElementById("clear-sw").addEventListener("click", async () => {
+  if (!("serviceWorker" in navigator)) {
+    status.textContent = "Service workers are not supported in this browser.";
+    return;
+  }
+
+  const registrations = await navigator.serviceWorker.getRegistrations();
+  const results = await Promise.all(
+    registrations.map(registration => registration.unregister())
+  );
+  status.textContent = `Unregistered ${results.filter(Boolean).length} service worker(s).`;
+});
+</script>
